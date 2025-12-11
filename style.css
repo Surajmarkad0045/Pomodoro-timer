@@ -1,0 +1,100 @@
+/* General Page Style */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f0f4ff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Timer Section */
+.timer {
+    margin: 20px 0;
+}
+
+#time-display {
+    font-size: 60px;
+    font-weight: bold;
+    color: #333;
+}
+
+#session-label {
+    font-size: 18px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Buttons */
+.controls button {
+    width: 80px;
+    padding: 10px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 8px;
+    background: #3461ff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.controls button:hover {
+    background: #254ad8;
+}
+
+/* Settings Section */
+.settings {
+    text-align: left;
+    margin-top: 30px;
+}
+
+.settings h2 {
+    text-align: center;
+    color: #333;
+}
+
+.settings label {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #444;
+}
+
+.settings input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+}
+
+#save-settings {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background: #28b463;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#save-settings:hover {
+    background: #1e8c4f;
+}
