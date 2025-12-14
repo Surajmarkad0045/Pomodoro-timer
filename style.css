@@ -1,100 +1,245 @@
-/* General Page Style */
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f0f4ff;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+:root{
+  --bg: #0f1724;
+  --card: #0b1220;
+  --muted: #98a0b3;
+  --accent: #7c5cff;
+  --text: #e6eef7;
+  --glass: rgba(255,255,255,0.03);
 }
 
-.container {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    width: 350px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    text-align: center;
+*{box-sizing:border-box}
+html,body{height:100%}
+
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:linear-gradient(180deg,#061021 0%, #071428 100%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition: background 0.5s ease;
 }
 
-h1 {
-    margin-bottom: 20px;
-    color: #333;
+/* App container */
+.app{
+  width:100%;
+  max-width:980px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:14px;
+  padding:20px;
+  box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+  border: 1px solid rgba(255,255,255,0.02);
+  transition: all 0.3s ease;
 }
 
-/* Timer Section */
-.timer {
-    margin: 20px 0;
+.app:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 12px 50px rgba(2,6,23,0.8);
 }
 
-#time-display {
-    font-size: 60px;
-    font-weight: bold;
-    color: #333;
+/* header */
+.app-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:14px;
+}
+.app-header h1{
+  margin:0;font-size:20px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+}
+.subtitle{margin:0;color:var(--muted);font-size:13px}
+
+/* main layout */
+.timer-panel{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
 }
 
-#session-label {
-    font-size: 18px;
-    color: #666;
-    margin-top: 10px;
+/* Timer display + progress ring */
+.timer-display{flex:1;min-width:260px}
+
+.ring{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  transition: all 0.3s ease;
 }
 
-/* Buttons */
-.controls button {
-    width: 80px;
-    padding: 10px;
-    margin: 10px 5px;
-    border: none;
-    border-radius: 8px;
-    background: #3461ff;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
+.ring:hover .time-text{
+  color: var(--accent);
+  text-shadow: 0 0 12px var(--accent), 0 0 25px rgba(124,92,255,0.4);
 }
 
-.controls button:hover {
-    background: #254ad8;
+.progress-ring{
+  width:140px;
+  height:140px;
+  display:block;
+  transition: transform 0.3s ease;
 }
 
-/* Settings Section */
-.settings {
-    text-align: left;
-    margin-top: 30px;
+.progress-ring:hover{
+  transform: rotate(5deg);
 }
 
-.settings h2 {
-    text-align: center;
-    color: #333;
+/* ring background */
+.ring-bg{
+  fill:none;
+  stroke:rgba(255,255,255,0.06);
+  stroke-width:12;
 }
 
-.settings label {
-    display: block;
-    margin-top: 15px;
-    font-size: 14px;
-    color: #444;
+/* 🔥 PROGRESS TRACKER */
+.ring-progress{
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:12;
+  stroke-linecap:round;
+  transform-origin:center;
+  transform:rotate(-90deg);
+  transition:stroke-dashoffset 0.3s linear, stroke 0.3s ease;
+
+  /* IMPORTANT */
+  stroke-dasharray:339.29;
+  stroke-dashoffset:339.29;
 }
 
-.settings input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #aaa;
-    border-radius: 6px;
+/* time text */
+.time-text{min-width:180px;transition: color 0.3s ease, text-shadow 0.3s ease}
+.mode-label{font-size:13px;color:var(--muted);margin-bottom:6px}
+.time-large{font-size:36px;font-weight:600;transition: color 0.3s ease}
+.session-info{color:var(--muted);font-size:13px;margin-top:6px}
+
+/* controls */
+.controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
-#save-settings {
-    width: 100%;
-    margin-top: 20px;
-    padding: 10px;
-    background: #28b463;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+.btn{
+  padding:10px 14px;
+  border-radius:10px;
+  border:0;
+  background:var(--glass);
+  color:var(--text);
+  cursor:pointer;
+  font-weight:600;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+  transition: all 0.3s ease, transform 0.2s ease;
 }
 
-#save-settings:hover {
-    background: #1e8c4f;
+.btn:hover{
+  transform: scale(1.08);
+  box-shadow: 0 5px 15px rgba(124,92,255,0.4);
+  background: linear-gradient(135deg, #7c5cff, #a27bff);
+  color:#fff;
+}
+
+.btn:active{
+  transform: scale(0.95);
+}
+
+.btn.primary{
+  background:linear-gradient(90deg,var(--accent),#a27bff);
+  color:#fff;
+}
+
+.btn:disabled{
+  opacity:0.45;
+  cursor:not-allowed;
+}
+
+/* settings panel */
+.settings-panel{
+  margin-top:18px;
+  border-radius:10px;
+  padding:16px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.02);
+  transition: background 0.3s ease;
+}
+
+.settings-panel h2{
+  margin:0 0 10px 0;
+  font-size:16px;
+}
+
+.settings-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+}
+
+.setting{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.setting label{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.setting input[type="number"],
+.setting select{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.03);
+  background:transparent;
+  color:var(--text);
+  transition: all 0.3s ease;
+}
+
+.setting input[type="number"]:focus,
+.setting select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* bottom actions */
+.settings-actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+
+.app-footer{
+  text-align:center;
+  margin-top:14px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* small screens */
+@media (max-width:720px){
+  .ring{flex-direction:column}
+  .time-large{font-size:30px}
+}
+
+/* Themes */
+body[data-theme="light"]{
+  --bg:#f5f8fb;
+  --card:#ffffff;
+  --muted:#556580;
+  --accent:#ff6b6b;
+  --text:#18202b;
+  background:linear-gradient(180deg,#f9fbff,#eef4ff);
+}
+
+body[data-theme="blue"]{
+  --accent:#16a6ff;
+  --bg:#071833;
+  --card:#071226;
 }

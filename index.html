@@ -1,53 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pomodoro Timer</title>
-
-    <!-- CSS File -->
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pomodoro Timer — Customizable</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <main class="app">
 
-    <div class="container">
-        <h1>Pomodoro Timer</h1>
+    <!-- HEADER -->
+    <header class="app-header">
+      <h1>Pomodoro Timer</h1>
+      <p class="subtitle">Focus better with progress tracking</p>
+    </header>
 
-        <!-- Timer Section -->
-        <div class="timer">
+    <!-- TIMER + PROGRESS TRACKER -->
+    <section class="timer-panel">
 
-            <div id="time-display">25:00</div>
-            <div id="session-label">Work Session</div>
+      <div class="timer-display" id="timerDisplay">
+        <div class="ring">
+
+          <!-- 🔵 PROGRESS TRACKER (CIRCULAR) -->
+          <svg viewBox="0 0 120 120" class="progress-ring">
+            <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+            <circle class="ring-progress" cx="60" cy="60" r="54"></circle>
+          </svg>
+
+          <!-- TIME TEXT -->
+          <div class="time-text">
+            <div id="modeLabel" class="mode-label">Work</div>
+            <div id="timeText" class="time-large">25:00</div>
+            <div class="session-info">
+              <span id="cycleLabel">Cycle 0</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="controls">
+        <button id="startBtn" class="btn primary">Start</button>
+        <button id="pauseBtn" class="btn">Pause</button>
+        <button id="resetBtn" class="btn">Reset</button>
+      </div>
+
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="settings-panel">
+      <h2>Settings</h2>
+
+      <div class="settings-grid">
+
+        <div class="setting">
+          <label>Work (minutes)</label>
+          <input type="number" id="workInput" value="25" min="1">
         </div>
 
-        <!-- Controls -->
-        <div class="controls">
-            <button id="start-btn">Start</button>
-            <button id="pause-btn">Pause</button>
-            <button id="reset-btn">Reset</button>
+        <div class="setting">
+          <label>Short Break (minutes)</label>
+          <input type="number" id="shortInput" value="5" min="1">
         </div>
 
-        <!-- Customization Options -->
-        <div class="settings">
-            <h2>Customize Timer</h2>
-
-            <label>Work Duration (minutes):</label>
-            <input type="number" id="work-duration" value="25" />
-
-            <label>Short Break (minutes):</label>
-            <input type="number" id="short-break" value="5" />
-
-            <label>Long Break (minutes):</label>
-            <input type="number" id="long-break" value="15" />
-
-            <button id="save-settings">Save Settings</button>
+        <div class="setting">
+          <label>Long Break (minutes)</label>
+          <input type="number" id="longInput" value="15" min="1">
         </div>
-    </div>
 
-    <!-- JavaScript File -->
-    <script src="script.js"></script>
+        <div class="setting">
+          <label>Sound</label>
+          <select id="soundSelect">
+            <option value="beep">Beep</option>
+            <option value="doubleBeep">Double Beep</option>
+            <option value="melody">Melody</option>
+            <option value="none">No Sound</option>
+          </select>
+        </div>
 
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <small>Pomodoro Timer with Progress Tracker</small>
+    </footer>
+
+  </main>
+
+  <!-- JS -->
+  <script src="script.js"></script>
 </body>
 </html>

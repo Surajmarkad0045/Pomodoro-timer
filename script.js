@@ -1,7 +1,6 @@
 /*
  Pomodoro Timer with Customization Options
- Rewritten & simplified version of script.js
- Purpose: Implement timer functionality with clean structure and comments
+ With Progress Tracker (Circular Ring)
 */
 
 (() => {
@@ -46,20 +45,18 @@
   };
 
   /* =====================
-     STATE VARIABLES
+     STATE
   ===================== */
   let timer = null;
-  let remaining = 0;      // seconds left
-  let total = 0;          // total seconds of session
+  let remaining = 0;
+  let total = 0;
   let running = false;
-  let mode = 'work';      // work | short | long
-  let cycleCount = 0;     // completed work sessions
+  let mode = 'work';
+  let cycleCount = 0;
 
   /* =====================
-     UTILITY FUNCTIONS
+     TIME FORMAT
   ===================== */
-
-  // Convert seconds into MM:SS format
   function formatTime(seconds) {
     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
     const s = String(seconds % 60).padStart(2, '0');
@@ -67,19 +64,27 @@
   }
 
   /* =====================
-     PROGRESS RING LOGIC
+     PROGRESS TRACKER (RING)
   ===================== */
   const RADIUS = 54;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-  ringProgress.style.strokeDasharray = `${CIRCUMFERENCE}`;
+
+  ringProgress.style.strokeDasharray = CIRCUMFERENCE;
+  ringProgress.style.strokeDashoffset = CIRCUMFERENCE;
 
   function updateProgress() {
-    const percent = total ? (total - remaining) / total : 0;
-    ringProgress.style.strokeDashoffset = CIRCUMFERENCE * (1 - percent);
+    if (!total) return;
+    const percent = (total - remaining) / total;
+    ringProgress.style.strokeDashoffset =
+      CIRCUMFERENCE * (1 - percent);
+  }
+
+  function resetProgress() {
+    ringProgress.style.strokeDashoffset = CIRCUMFERENCE;
   }
 
   /* =====================
-     SETTINGS (LOCAL STORAGE)
+     LOCAL STORAGE
   ===================== */
   function loadSettings() {
     const saved = JSON.parse(localStorage.getItem('pomodoro.settings')) || {};
@@ -89,10 +94,10 @@
     shortInput.value = s.short;
     longInput.value = s.long;
     cyclesUntilLong.value = s.cyclesUntilLong;
-    autoStart.value = String(s.autoStart);
+    autoStart.checked = s.autoStart;
     soundSelect.value = s.sound;
     themeSelect.value = s.theme;
-    notifySelect.value = String(s.notify);
+    notifySelect.checked = s.notify;
 
     applyTheme(s.theme);
   }
@@ -103,15 +108,15 @@
       short: +shortInput.value,
       long: +longInput.value,
       cyclesUntilLong: +cyclesUntilLong.value,
-      autoStart: autoStart.value === 'true',
+      autoStart: autoStart.checked,
       sound: soundSelect.value,
       theme: themeSelect.value,
-      notify: notifySelect.value === 'true'
+      notify: notifySelect.checked
     };
 
     localStorage.setItem('pomodoro.settings', JSON.stringify(settings));
     applyTheme(settings.theme);
-    alert('Settings saved successfully');
+    alert('Settings saved');
   }
 
   function restoreDefaults() {
@@ -121,27 +126,24 @@
   }
 
   /* =====================
-     THEME HANDLING
+     THEME
   ===================== */
   function applyTheme(theme) {
     document.body.setAttribute('data-theme', theme);
   }
 
   /* =====================
-     SOUND NOTIFICATION (CUSTOM SOUNDS)
+     SOUND
   ===================== */
-
-  // Audio object for custom sounds
-  let audio = new Audio();
+  const audio = new Audio();
 
   function playSound(type) {
     if (type === 'none') return;
 
-    // Predefined sound files (place in sounds/ folder)
     const sounds = {
       beep: 'sounds/beep.mp3',
-      bell: 'sounds/bell.mp3',
-      alarm: 'sounds/alarm.mp3'
+      doubleBeep: 'sounds/double-beep.mp3',
+      melody: 'sounds/melody.mp3'
     };
 
     if (sounds[type]) {
@@ -152,40 +154,48 @@
   }
 
   /* =====================
-     TIMER CORE LOGIC
+     TIMER LOGIC
   ===================== */
   function setMode(newMode) {
     mode = newMode;
-    modeLabel.textContent = newMode === 'work'
-      ? 'Work'
-      : newMode === 'short'
-      ? 'Short Break'
-      : 'Long Break';
 
-    const minutes = newMode === 'work'
-      ? workInput.value
-      : newMode === 'short'
-      ? shortInput.value
-      : longInput.value;
+    modeLabel.textContent =
+      newMode === 'work'
+        ? 'Work'
+        : newMode === 'short'
+        ? 'Short Break'
+        : 'Long Break';
+
+    const minutes =
+      newMode === 'work'
+        ? workInput.value
+        : newMode === 'short'
+        ? shortInput.value
+        : longInput.value;
 
     total = remaining = minutes * 60;
+    resetProgress();
     updateUI();
   }
 
   function startTimer() {
     if (running) return;
     running = true;
+
     timer = setInterval(() => {
       remaining--;
       updateUI();
 
-      if (remaining <= 0) completeSession();
+      if (remaining <= 0) {
+        completeSession();
+      }
     }, 1000);
   }
 
   function pauseTimer() {
     running = false;
     clearInterval(timer);
+    timer = null;
   }
 
   function resetTimer() {
@@ -200,14 +210,19 @@
 
     if (mode === 'work') cycleCount++;
 
-    const needLongBreak = cycleCount % cyclesUntilLong.value === 0;
-    const nextMode = mode === 'work'
-      ? (needLongBreak ? 'long' : 'short')
-      : 'work';
+    const longBreak =
+      cycleCount % cyclesUntilLong.value === 0;
+
+    const nextMode =
+      mode === 'work'
+        ? (longBreak ? 'long' : 'short')
+        : 'work';
 
     setMode(nextMode);
 
-    if (autoStart.value === 'true') startTimer();
+    if (autoStart.checked) {
+      startTimer();
+    }
   }
 
   function updateUI() {
@@ -217,7 +232,7 @@
   }
 
   /* =====================
-     EVENT LISTENERS
+     EVENTS
   ===================== */
   startBtn.addEventListener('click', startTimer);
   pauseBtn.addEventListener('click', pauseTimer);
@@ -227,7 +242,7 @@
   restoreBtn.addEventListener('click', restoreDefaults);
 
   /* =====================
-     INITIALIZATION
+     INIT
   ===================== */
   loadSettings();
   setMode('work');
